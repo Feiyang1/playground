@@ -15,10 +15,10 @@ const firebaseConfig: FirebaseOptions = {
 
 const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
 
-
+// getAuth();
 const firestore = getFirestore(firebaseApp);
 setLogLevel("debug");
-// getAuth();
+getAuth();
 getDoc(doc(firestore, 'coll/New York')).then(v => {
     console.log('sync firestore get', v.data());
 });
@@ -33,6 +33,7 @@ async function run() {
 
 setTimeout(() => {
     getAuth();
+    console.log('after getAuth()())()()()()()(()()')
     getDoc(doc(firestore, 'coll/New York')).then(v => {
         console.log('AAAAAAsync firestore get', v.data());
     });
