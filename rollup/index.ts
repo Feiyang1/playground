@@ -1,6 +1,7 @@
 import { getFirestore, getDoc, doc, setLogLevel } from "firebase/firestore";
 import { initializeApp, FirebaseApp, FirebaseOptions } from 'firebase/app';
 import { getAuth, signInAnonymously } from 'firebase/auth';
+import { getDatabase, get, ref} from 'firebase/database';
 
 const firebaseConfig: FirebaseOptions = {
     apiKey: "AIzaSyCSwhdsZZ34EQXL-QOOidN9IHUGxmmjPdU",
@@ -16,27 +17,45 @@ const firebaseConfig: FirebaseOptions = {
 const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
 
 // getAuth();
-const firestore = getFirestore(firebaseApp);
-setLogLevel("debug");
-getAuth();
-getDoc(doc(firestore, 'coll/New York')).then(v => {
-    console.log('sync firestore get', v.data());
-});
-async function run() {
-    // const auth = getAuth();
-    // await signInAnonymously(auth);
+// const firestore = getFirestore(firebaseApp);
+// setLogLevel("debug");
+// // getAuth();
+// getDoc(doc(firestore, 'coll/New York')).then(v => {
+//     console.log('sync firestore get', v.data());
+// });
+// async function run() {
+//     // const auth = getAuth();
+//     // await signInAnonymously(auth);
 
-    // getDoc(doc(firestore, 'coll/New York')).then(v => {
-    //     console.log('sync firestore get', v.data());
-    // });
-}
+//     // getDoc(doc(firestore, 'coll/New York')).then(v => {
+//     //     console.log('sync firestore get', v.data());
+//     // });
+// }
+
+// setTimeout(() => {
+//     // getAuth();
+//     console.log('after getAuth()())()()()()()(()()')
+//     getDoc(doc(firestore, 'coll/New York')).then(v => {
+//         console.log('AAAAAAsync firestore get', v.data());
+//     });
+// }, 500);
+
+// run();
+
+
+/** Database */
+// getAuth();
+const database = getDatabase();
+// getAuth();
+const docRef = ref(database, 'Foo');
+
+get(docRef).then(d => {
+    console.log('database get', d.val());
+});
 
 setTimeout(() => {
-    getAuth();
-    console.log('after getAuth()())()()()()()(()()')
-    getDoc(doc(firestore, 'coll/New York')).then(v => {
-        console.log('AAAAAAsync firestore get', v.data());
+   getAuth();
+    get(docRef).then(d => {
+        console.log('database get async', d.val());
     });
-}, 500);
-
-run();
+})
