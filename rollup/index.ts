@@ -1,7 +1,8 @@
 import { getFirestore, getDoc, doc, setLogLevel } from "firebase/firestore";
 import { initializeApp, FirebaseApp, FirebaseOptions } from 'firebase/app';
-import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword } from 'firebase/auth';
 import { getDatabase, get, ref } from 'firebase/database';
+import { getStorage, getDownloadURL, ref as storageRef } from 'firebase/storage';
 
 const firebaseConfig: FirebaseOptions = {
     apiKey: "AIzaSyCSwhdsZZ34EQXL-QOOidN9IHUGxmmjPdU",
@@ -53,18 +54,20 @@ const docRef = ref(database, 'Foo');
 //     console.log('database get', d.val());
 // });
 
-setTimeout(() => {
-    getAuth();
+setTimeout(async () => {
+    await signInWithEmailAndPassword(getAuth(), 'test@test.test', 'testtest');
 
     // access denied
-    get(docRef).then(d => {
-        console.log('database get async', d.val());
-    });
+    // get(docRef).then(d => {
+    //     console.log('database get async', d.val());
+    // });
 
-    onAuthStateChanged(getAuth(), (user) => {
-        // access denied
-        get(docRef).then(d => {
-            console.log('database get async', d.val());
-        });
-    });
+    // onAuthStateChanged(getAuth(), (user) => {
+    //     // access denied
+    //     get(docRef).then(d => {
+    //         console.log('database get async', d.val());
+    //     });
+    // });
+
+    getDownloadURL(storageRef(getStorage(), 'data_txt')).then(url => console.log('url is', url))
 }, 1000)
