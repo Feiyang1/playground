@@ -1,7 +1,7 @@
 import { getFirestore, getDoc, doc, setLogLevel } from "firebase/firestore";
 import { initializeApp, FirebaseApp, FirebaseOptions } from 'firebase/app';
-import { getAuth, signInAnonymously } from 'firebase/auth';
-import { getDatabase, get, ref} from 'firebase/database';
+import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
+import { getDatabase, get, ref } from 'firebase/database';
 
 const firebaseConfig: FirebaseOptions = {
     apiKey: "AIzaSyCSwhdsZZ34EQXL-QOOidN9IHUGxmmjPdU",
@@ -49,13 +49,22 @@ const database = getDatabase();
 // getAuth();
 const docRef = ref(database, 'Foo');
 
-get(docRef).then(d => {
-    console.log('database get', d.val());
-});
+// get(docRef).then(d => {
+//     console.log('database get', d.val());
+// });
 
 setTimeout(() => {
-   getAuth();
+    getAuth();
+
+    // access denied
     get(docRef).then(d => {
         console.log('database get async', d.val());
     });
-})
+
+    onAuthStateChanged(getAuth(), (user) => {
+        // access denied
+        get(docRef).then(d => {
+            console.log('database get async', d.val());
+        });
+    });
+}, 1000)

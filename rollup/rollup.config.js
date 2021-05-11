@@ -29,13 +29,13 @@ const plugins = [
     mainFields: ['esm2017', 'module']
   }),
   commonjs(),
-  terser({
-    format: {
-      comments: false
-    },
-    mangle: { toplevel: true },
-    compress: false
-  }),
+  // terser({
+  //   format: {
+  //     comments: false
+  //   },
+  //   mangle: { toplevel: true },
+  //   compress: false
+  // }),
   jsonplugin()
 ];
 
