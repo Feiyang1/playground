@@ -4,7 +4,8 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
     entry: "./index.ts",
     output: {
-        filename: "bundle.js"
+        filename: "[name].js",
+        // chunkFilename: `chunk.[name].[hash].js`,
     },
     devtool: 'source-map',
     module: {

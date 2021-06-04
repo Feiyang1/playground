@@ -1,6 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import { indexedDBLocalPersistence, initializeAuth } from '@firebase/auth';
-import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCSwhdsZZ34EQXL-QOOidN9IHUGxmmjPdU",
@@ -14,9 +12,3 @@ const firebaseConfig = {
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
-
-
-export const auth = initializeAuth(firebaseApp, {
-    persistence: [indexedDBLocalPersistence]
-});
-export const firestore = getFirestore(firebaseApp);
