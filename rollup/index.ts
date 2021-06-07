@@ -6,6 +6,7 @@ import { getAnalytics, logEvent, settings, SettingsOptions } from 'firebase/anal
 import { getPerformance, FirebasePerformance, PerformanceTrace, trace } from 'firebase/performance';
 import { getRemoteConfig, RemoteConfig, setLogLevel, fetchAndActivate, getAll } from 'firebase/remote-config';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
 
 const firebaseConfig: FirebaseOptions = {
     apiKey: "AIzaSyCSwhdsZZ34EQXL-QOOidN9IHUGxmmjPdU",
@@ -48,11 +49,11 @@ async function run() {
     /**
      * Storage
      */
-    // const storage = getStorage(firebaseApp);
-    // const storageRef = ref(storage, "data_txt");
-    // await uploadString(storageRef, "Hello World");
-    // const url = await getDownloadURL(storageRef);
-    // console.log('download url is ', url);
+    const storage = getStorage(firebaseApp);
+    const storageRef = ref(storage, "data_txt");
+    await uploadString(storageRef, "Hello World");
+    const url = await getDownloadURL(storageRef);
+    console.log('download url is ', url);
 
     /**
      * Analytics
@@ -79,6 +80,7 @@ async function run() {
     /**
      * FCM
      */
+    onBackgroundMessage(getMessaging(), () => {})
 
     /**
      * Functions

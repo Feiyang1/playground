@@ -3,6 +3,7 @@ import { getStorage, uploadString, getDownloadURL, ref } from "firebase/storage"
 import { getFirestore, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { getAuth, indexedDBLocalPersistence, initializeAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+import { getMessaging, onBackgroundMessage} from 'firebase/messaging/sw'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCSwhdsZZ34EQXL-QOOidN9IHUGxmmjPdU",
@@ -45,6 +46,8 @@ async function run() {
     // const url = await getDownloadURL(storageRef);
     // console.log('download url is ', url);
     // await databaseRef.set(url);
+
+    onBackgroundMessage(getMessaging(), () => {})
 }
 
 setTimeout(async () => {
