@@ -5,7 +5,7 @@ import { getAuth, signInAnonymously } from 'firebase/auth';
 import { getAnalytics, logEvent, settings, SettingsOptions } from 'firebase/analytics';
 import { getPerformance, FirebasePerformance, PerformanceTrace, trace } from 'firebase/performance';
 import { getRemoteConfig, RemoteConfig, setLogLevel, fetchAndActivate, getAll } from 'firebase/remote-config';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
 
 const firebaseConfig: FirebaseOptions = {
@@ -35,6 +35,8 @@ async function run() {
     getDoc(doc(firestore, 'coll/New York')).then(d => {
         console.log('got data from firestore, ', d.data())
     });
+
+    await setDoc(doc(firestore, 'coll/New York'), {test: false}, {merge: true});
 
     /**
      * Database

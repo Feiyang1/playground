@@ -1,9 +1,12 @@
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref as rtdbRef, get } from "firebase/database";
 import { getStorage, uploadString, getDownloadURL, ref } from "firebase/storage";
-import { getFirestore, doc, getDoc, onSnapshot } from "firebase/firestore";
-import { initializeApp } from 'firebase/app';
-import { getAuth, indexedDBLocalPersistence, initializeAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-import { getMessaging, onBackgroundMessage} from 'firebase/messaging/sw'
+import { initializeApp, FirebaseApp, FirebaseOptions } from 'firebase/app';
+import { getAuth, signInAnonymously } from 'firebase/auth';
+import { getAnalytics, logEvent, settings, SettingsOptions } from 'firebase/analytics';
+import { getPerformance, FirebasePerformance, PerformanceTrace, trace } from 'firebase/performance';
+import { getRemoteConfig, RemoteConfig, setLogLevel, fetchAndActivate, getAll } from 'firebase/remote-config';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+// import { getMessaging, onBackgroundMessage} from 'firebase/messaging/sw'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCSwhdsZZ34EQXL-QOOidN9IHUGxmmjPdU",
@@ -22,10 +25,10 @@ const firebaseApp = initializeApp(firebaseConfig);
 // console.log('get database ref');
 // const databaseRef = database.ref("data.txt");
 // const storage = getStorage(firebaseApp);
-const auth = getAuth();
-const firestore = getFirestore(firebaseApp);
+// const auth = getAuth();
+// const firestore = getFirestore(firebaseApp);
 
-console.log(auth);
+// console.log(auth);
 
 // const docRef = doc(firestore, 'coll/New York');
 // onSnapshot(docRef, snapshot => {
@@ -37,17 +40,72 @@ console.log(auth);
 // const storageRef = ref(storage, "data.txt");
 
 async function run() {
-    // await signInAnonymously(auth);
-    getDoc(doc(firestore, 'coll/New York')).then(d => console.log('auth initialize sync', d.data()));
+    /**
+     * Auth
+     */
+    const auth = getAuth(firebaseApp);
+    console.log('signed in', await signInAnonymously(auth));
+
+    /**
+     * Firestore
+     */
+    const firestore = getFirestore();
+    await setDoc(doc(firestore, 'coll/New York'), {test: false}, {merge: true});
+
+    await getDoc(doc(firestore, 'coll/New York')).then(d => {
+        console.log('got data from firestore, ', d.data())
+    });
 
 
+    /**
+     * Database
+     */
+    const database = getDatabase(firebaseApp);
+    console.log('get database ref');
+    get(rtdbRef(database, "Foo")).then(d => {
+        console.log('got data from database, ', d.val())
+    });
 
-    // await uploadString(storageRef, "Hello World");
-    // const url = await getDownloadURL(storageRef);
-    // console.log('download url is ', url);
-    // await databaseRef.set(url);
 
-    onBackgroundMessage(getMessaging(), () => {})
+    /**
+     * Storage
+     */
+    const storage = getStorage(firebaseApp);
+    const storageRef = ref(storage, "data_txt");
+    await uploadString(storageRef, "Hello World");
+    const url = await getDownloadURL(storageRef);
+    console.log('download url is ', url);
+
+    /**
+     * Analytics
+     */
+    const analytics = getAnalytics(firebaseApp);
+    logEvent(analytics, 'test_exp');
+
+
+    /**
+     * RC
+     */
+    const rc: RemoteConfig = getRemoteConfig(firebaseApp);
+    await fetchAndActivate(rc);
+
+    for (const key of Object.keys(getAll(rc))) {
+        console.log('rc', key);
+    }
+
+    /**
+     * Perf
+     */
+    const perf: FirebasePerformance = getPerformance(firebaseApp);
+
+    /**
+     * FCM
+     */
+    // onBackgroundMessage(getMessaging(), () => {})
+
+    /**
+     * Functions
+     */
 }
 
 setTimeout(async () => {
