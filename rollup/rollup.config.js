@@ -46,8 +46,7 @@ export default [
   {
     input: 'index.ts',
     output: [
-      { file: 'dist/bundle.cjs.js', format: 'cjs' },
-      { file: 'dist/bundle.esm.js', format: 'es' }
+      { dir: 'dist', format: 'es' }
     ],
     plugins,
     // external: id => externals.some(dep => id === dep)

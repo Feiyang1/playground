@@ -18,12 +18,12 @@ const firebaseConfig: FirebaseOptions = {
 const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
 
 // getAuth();
-// const firestore = getFirestore(firebaseApp);
-// setLogLevel("debug");
+const firestore = getFirestore(firebaseApp);
+setLogLevel("debug");
 // // getAuth();
-// getDoc(doc(firestore, 'coll/New York')).then(v => {
-//     console.log('sync firestore get', v.data());
-// });
+getDoc(doc(firestore, 'coll/New York')).then(v => {
+    console.log('sync firestore get', v.data());
+});
 // async function run() {
 //     // const auth = getAuth();
 //     // await signInAnonymously(auth);
@@ -31,10 +31,17 @@ const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
 //     // getDoc(doc(firestore, 'coll/New York')).then(v => {
 //     //     console.log('sync firestore get', v.data());
 //     // });
-// }
+// } 
 
+import('firebase/auth').then(({getAuth}) => {
+    getAuth();
+    console.log('after getAuth()())()()()()()(()()')
+    getDoc(doc(firestore, 'coll/New York')).then(v => {
+        console.log('AAAAAAsync firestore get', v.data());
+    });
+});
 // setTimeout(() => {
-//     // getAuth();
+//     getAuth();
 //     console.log('after getAuth()())()()()()()(()()')
 //     getDoc(doc(firestore, 'coll/New York')).then(v => {
 //         console.log('AAAAAAsync firestore get', v.data());
@@ -55,7 +62,7 @@ const docRef = ref(database, 'Foo');
 // });
 
 setTimeout(async () => {
-    await signInWithEmailAndPassword(getAuth(), 'test@test.test', 'testtest');
+    // await signInWithEmailAndPassword(getAuth(), 'test@test.test', 'testtest');
 
     // access denied
     // get(docRef).then(d => {
@@ -69,5 +76,5 @@ setTimeout(async () => {
     //     });
     // });
 
-    getDownloadURL(storageRef(getStorage(), 'data_txt')).then(url => console.log('url is', url))
+    // getDownloadURL(storageRef(getStorage(), 'data_txt')).then(url => console.log('url is', url))
 }, 1000)
